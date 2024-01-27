@@ -1,4 +1,29 @@
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
+
+const Statistics = (props) => {
+	const { good, neutral, bad, total } = props;
+	const getAverage = () => {
+		if (good + neutral + bad == 0) return 0;
+		return (good - bad) / (good + neutral + bad);
+	};
+
+	const getPositiveRate = () => {
+		if (good + neutral + bad == 0) return 0;
+		return (good / (good + neutral + bad)) * 100;
+	};
+
+	return (
+		<Fragment>
+			<h1>statistics</h1>
+			<p>good {good}</p>
+			<p>neutral {neutral}</p>
+			<p>bad {bad}</p>
+			<p>all {total}</p>
+			<p>average {getAverage()}</p>
+			<p>positive {getPositiveRate()}%</p>
+		</Fragment>
+	);
+};
 
 const App = () => {
 	// save clicks of each button to its own state
@@ -22,29 +47,17 @@ const App = () => {
 		setTotal(good + neutral + bad + 1);
 	};
 
-	const getAverage = () => {
-		if (good + neutral + bad == 0) return 0;
-		return (good - bad) / (good + neutral + bad);
-	};
-
-	const getPositiveRate = () => {
-		if (good + neutral + bad == 0) return 0;
-		return (good / (good + neutral + bad)) * 100;
-	};
-
 	return (
 		<div>
 			<h1>give feedback</h1>
 			<button onClick={() => handleGoodClick()}>good</button>
 			<button onClick={handleNeutralClick}>neutral</button>
 			<button onClick={handleBadClick}>bad</button>
-			<h1>statistics</h1>
-			<p>good {good}</p>
-			<p>neutral {neutral}</p>
-			<p>bad {bad}</p>
-			<p>all {total}</p>
-			<p>average {getAverage()}</p>
-			<p>positive {getPositiveRate()}%</p>
+			<Statistics
+				good={good}
+				neutral={neutral}
+				bad={bad}
+				total={total}></Statistics>
 		</div>
 	);
 };
