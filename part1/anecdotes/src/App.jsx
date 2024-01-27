@@ -13,11 +13,19 @@ const App = () => {
 	];
 
 	const [selected, setSelected] = useState(0);
+	const [votes, setVotes] = useState(Array(anecdotes.length).fill(0));
 
 	return (
 		<div>
 			{anecdotes[selected]}
+			<div>has {votes[selected]} votes</div>
 			<div>
+				<button
+					onClick={() => {
+						const copy = [...votes];
+						copy[selected]++;
+						setVotes(copy);
+					}}>vote</button>
 				<button
 					onClick={() => {
 						setSelected(
