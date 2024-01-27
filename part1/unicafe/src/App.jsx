@@ -2,6 +2,13 @@ import { Fragment, useState } from 'react';
 
 const Statistics = (props) => {
 	const { good, neutral, bad, total } = props;
+	if (total == 0) return (
+		<Fragment>
+			<h1>statistics</h1>
+			<p>No feedback given</p>
+		</Fragment>
+	);
+
 	const getAverage = () => {
 		if (good + neutral + bad == 0) return 0;
 		return (good - bad) / (good + neutral + bad);
