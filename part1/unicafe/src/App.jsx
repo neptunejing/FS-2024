@@ -6,9 +6,10 @@ const Button = (props) => {
 };
 
 const StatisticsLine = ({ text, value }) => (
-	<p>
-		{text} {value}
-	</p>
+	<tr>
+		<td>{text}</td>
+		<td>{value}</td>
+	</tr>
 );
 
 const Statistics = (props) => {
@@ -34,16 +35,22 @@ const Statistics = (props) => {
 	return (
 		<Fragment>
 			<h1>statistics</h1>
-			<StatisticsLine text={'good'} value={good}></StatisticsLine>
-			<StatisticsLine text={'neutral'} value={neutral}></StatisticsLine>
-			<StatisticsLine text={'bad'} value={bad}></StatisticsLine>
-			<StatisticsLine text={'all'} value={total}></StatisticsLine>
-			<StatisticsLine
-				text={'average'}
-				value={getAverage()}></StatisticsLine>
-			<StatisticsLine
-				text={'positive'}
-				value={getPositiveRate() + '%'}></StatisticsLine>
+			<table>
+				<tbody>
+					<StatisticsLine text={'good'} value={good}></StatisticsLine>
+					<StatisticsLine
+						text={'neutral'}
+						value={neutral}></StatisticsLine>
+					<StatisticsLine text={'bad'} value={bad}></StatisticsLine>
+					<StatisticsLine text={'all'} value={total}></StatisticsLine>
+					<StatisticsLine
+						text={'average'}
+						value={getAverage()}></StatisticsLine>
+					<StatisticsLine
+						text={'positive'}
+						value={getPositiveRate()}></StatisticsLine>
+				</tbody>
+			</table>
 		</Fragment>
 	);
 };
