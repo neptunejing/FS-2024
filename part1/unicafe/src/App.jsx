@@ -1,13 +1,25 @@
 import { Fragment, useState } from 'react';
 
+const Button = (props) => {
+	const { handleClick, text } = props;
+	return <button onClick={handleClick}>{text}</button>;
+};
+
+const StatisticsLine = ({ text, value }) => (
+	<p>
+		{text} {value}
+	</p>
+);
+
 const Statistics = (props) => {
 	const { good, neutral, bad, total } = props;
-	if (total == 0) return (
-		<Fragment>
-			<h1>statistics</h1>
-			<p>No feedback given</p>
-		</Fragment>
-	);
+	if (total == 0)
+		return (
+			<Fragment>
+				<h1>statistics</h1>
+				<p>No feedback given</p>
+			</Fragment>
+		);
 
 	const getAverage = () => {
 		if (good + neutral + bad == 0) return 0;
@@ -22,12 +34,16 @@ const Statistics = (props) => {
 	return (
 		<Fragment>
 			<h1>statistics</h1>
-			<p>good {good}</p>
-			<p>neutral {neutral}</p>
-			<p>bad {bad}</p>
-			<p>all {total}</p>
-			<p>average {getAverage()}</p>
-			<p>positive {getPositiveRate()}%</p>
+			<StatisticsLine text={'good'} value={good}></StatisticsLine>
+			<StatisticsLine text={'neutral'} value={neutral}></StatisticsLine>
+			<StatisticsLine text={'bad'} value={bad}></StatisticsLine>
+			<StatisticsLine text={'all'} value={total}></StatisticsLine>
+			<StatisticsLine
+				text={'average'}
+				value={getAverage()}></StatisticsLine>
+			<StatisticsLine
+				text={'positive'}
+				value={getPositiveRate() + '%'}></StatisticsLine>
 		</Fragment>
 	);
 };
@@ -57,9 +73,9 @@ const App = () => {
 	return (
 		<div>
 			<h1>give feedback</h1>
-			<button onClick={() => handleGoodClick()}>good</button>
-			<button onClick={handleNeutralClick}>neutral</button>
-			<button onClick={handleBadClick}>bad</button>
+			<Button handleClick={handleGoodClick} text={'good'}></Button>
+			<Button handleClick={handleNeutralClick} text={'neutral'}></Button>
+			<Button handleClick={handleBadClick} text={'bad'}></Button>
 			<Statistics
 				good={good}
 				neutral={neutral}
