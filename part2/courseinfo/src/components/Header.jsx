@@ -3,7 +3,7 @@ import { Fragment } from 'react';
 const Header = ({name}) => {
 	return (
 		<Fragment>
-			<h1>{name}</h1>
+			<h2>{name}</h2>
 		</Fragment>
 	);
 };
