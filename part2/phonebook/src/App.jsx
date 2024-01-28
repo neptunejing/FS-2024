@@ -4,7 +4,7 @@ import PersonForm from './components/PersonForm';
 import Persons from './components/Persons';
 import personService from './services/persons';
 import Notification from './components/Notification';
-import './index.css'
+import './index.css';
 
 const App = () => {
 	const [persons, setPersons] = useState([]);
@@ -12,6 +12,7 @@ const App = () => {
 	const [newNumber, setNewNumber] = useState('');
 	const [filterString, setFilterString] = useState('');
 	const [successMessage, setSuccessMessage] = useState(null);
+	const [errorMessage, setErrorMessage] = useState(null);
 
 	const handleChangeName = (event) => {
 		setNewName(event.target.value);
@@ -58,6 +59,14 @@ const App = () => {
 					);
 					setNewName('');
 					setNewNumber('');
+				})
+				.catch(() => {
+					setErrorMessage(
+						`Infomation of ${newName} has already been removed from server`
+					);
+					setTimeout(() => {
+						setErrorMessage(null);
+					}, 5000);
 				});
 			return;
 		}
@@ -88,7 +97,10 @@ const App = () => {
 	return (
 		<div>
 			<h2>Phonebook</h2>
-			<Notification message={successMessage}/>
+			<Notification
+				message={successMessage || errorMessage}
+				type={successMessage !== null ? 'success' : 'error'}
+			/>
 			<Filter
 				filterString={filterString}
 				handleChangeFilter={handleChangeFilter}
