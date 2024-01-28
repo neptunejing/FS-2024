@@ -1,6 +1,7 @@
 import { Fragment } from 'react';
 import Header from './Header';
 import Part from './Part';
+import Total from './Total';
 
 const Course = ({ course }) => {
 	const { name, parts } = course;
@@ -13,6 +14,7 @@ const Course = ({ course }) => {
 					name={part.name}
 					exercises={part.exercises}></Part>
 			))}
+            <Total parts={parts}></Total>
 		</Fragment>
 	);
 };
