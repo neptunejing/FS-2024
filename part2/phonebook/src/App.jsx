@@ -22,6 +22,17 @@ const App = () => {
 		setFilterString(event.target.value);
 	};
 
+	const handleDeletePerson = (deletePerson) => {
+		if (window.confirm(`Delete ${deletePerson.name}`)) {
+			personService.deleteById(deletePerson.id).then(() => {
+				const changedPersons = persons.filter(
+					(person) => person.id !== deletePerson.id
+				);
+				setPersons(changedPersons);
+			});
+		}
+	};
+
 	const addPerson = (event) => {
 		event.preventDefault();
 		const ifExists = persons.filter((person) => person.name === newName);
@@ -66,7 +77,11 @@ const App = () => {
 			/>
 
 			<h3>Numbers</h3>
-			<Persons persons={persons} filterString={filterString} />
+			<Persons
+				persons={persons}
+				filterString={filterString}
+				handleDeletePerson={handleDeletePerson}
+			/>
 		</div>
 	);
 };

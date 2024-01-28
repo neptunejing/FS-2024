@@ -1,4 +1,4 @@
-const Persons = ({ persons, filterString }) => {
+const Persons = ({ persons, filterString, handleDeletePerson }) => {
 	return persons
 		.filter(({ name }) =>
 			name.toLocaleLowerCase().includes(filterString.toLocaleLowerCase())
@@ -6,6 +6,9 @@ const Persons = ({ persons, filterString }) => {
 		.map((person, idx) => (
 			<p key={idx}>
 				{person.name} {person.number}
+				<button onClick={() => handleDeletePerson(person)}>
+					delete
+				</button>
 			</p>
 		));
 };
