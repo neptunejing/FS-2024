@@ -3,12 +3,15 @@ import Filter from './components/Filter';
 import PersonForm from './components/PersonForm';
 import Persons from './components/Persons';
 import personService from './services/persons';
+import Notification from './components/Notification';
+import './index.css'
 
 const App = () => {
 	const [persons, setPersons] = useState([]);
 	const [newName, setNewName] = useState('');
 	const [newNumber, setNewNumber] = useState('');
 	const [filterString, setFilterString] = useState('');
+	const [successMessage, setSuccessMessage] = useState(null);
 
 	const handleChangeName = (event) => {
 		setNewName(event.target.value);
@@ -44,11 +47,13 @@ const App = () => {
 		) {
 			const person = persons.find((person) => person.name === newName);
 			personService
-				.update({...person, number: newNumber})
+				.update({ ...person, number: newNumber })
 				.then((updatedPerson) => {
 					setPersons(
 						persons.map((person) =>
-							person.id !== updatedPerson.id ? person : updatedPerson
+							person.id !== updatedPerson.id
+								? person
+								: updatedPerson
 						)
 					);
 					setNewName('');
@@ -66,6 +71,10 @@ const App = () => {
 			setPersons(changedPersons);
 			setNewName('');
 			setNewNumber('');
+			setSuccessMessage(`Added ${newName}`);
+			setTimeout(() => {
+				setSuccessMessage(null);
+			}, 5000);
 		});
 	};
 
@@ -79,6 +88,7 @@ const App = () => {
 	return (
 		<div>
 			<h2>Phonebook</h2>
+			<Notification message={successMessage}/>
 			<Filter
 				filterString={filterString}
 				handleChangeFilter={handleChangeFilter}
