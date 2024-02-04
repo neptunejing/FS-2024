@@ -60,10 +60,9 @@ const App = () => {
 					setNewName('');
 					setNewNumber('');
 				})
-				.catch(() => {
-					setErrorMessage(
-						`Infomation of ${newName} has already been removed from server`
-					);
+				.catch((error) => {
+					console.log(error.response.data.error);
+					setErrorMessage(error.response.data.error);
 					setTimeout(() => {
 						setErrorMessage(null);
 					}, 5000);
@@ -76,15 +75,24 @@ const App = () => {
 			number: newNumber,
 		};
 		const changedPersons = [...persons, newPerson];
-		personService.create(newPerson).then(() => {
-			setPersons(changedPersons);
-			setNewName('');
-			setNewNumber('');
-			setSuccessMessage(`Added ${newName}`);
-			setTimeout(() => {
-				setSuccessMessage(null);
-			}, 5000);
-		});
+		personService
+			.create(newPerson)
+			.then(() => {
+				setPersons(changedPersons);
+				setNewName('');
+				setNewNumber('');
+				setSuccessMessage(`Added ${newName}`);
+				setTimeout(() => {
+					setSuccessMessage(null);
+				}, 5000);
+			})
+			.catch((error) => {
+				console.log(error.response.data.error);
+				setErrorMessage(error.response.data.error);
+				setTimeout(() => {
+					setErrorMessage(null);
+				}, 5000);
+			});
 	};
 
 	// initialize
