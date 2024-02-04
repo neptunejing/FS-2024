@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-morgan = require('morgan');
+const morgan = require('morgan');
 const Person = require('./models/person');
 
 const app = express();
@@ -52,7 +52,7 @@ app.get('/info', (req, res) => {
 	res.send(`Phonebook has info for ${cnt} people<p>${generateDate()}</p>`);
 });
 
-app.get('/api/persons/:id', (req, res) => {
+app.get('/api/persons/:id', (req, res, next) => {
 	Person.findById(req.params.id)
 		.then((person) => {
 			if (person) {
@@ -66,7 +66,7 @@ app.get('/api/persons/:id', (req, res) => {
 
 app.delete('/api/persons/:id', (req, res, next) => {
 	Person.findByIdAndDelete(req.params.id)
-		.then((result) => {
+		.then((res) => {
 			res.status(204).end();
 		})
 		.catch((error) => next(error));
@@ -108,7 +108,7 @@ app.put('/api/persons/:id', (req, res, next) => {
 		.catch((error) => next(error));
 });
 
-const errorHandler = (error, req, res, next) => {
+const errorHandler = (error, req, res) => {
 	console.error(error.message);
 
 	if (error.name === 'CastError') {
@@ -116,8 +116,6 @@ const errorHandler = (error, req, res, next) => {
 	} else {
 		return res.status(400).send({ error: error.message });
 	}
-
-	next(error);
 };
 
 // this has to be the last loaded middleware.
