@@ -15,7 +15,6 @@ const mostLikes = (blogs) => {
 			mostLiked = blog;
 		}
 	});
-	console.log(mostLiked);
 	return {
 		title: mostLiked.title,
 		author: mostLiked.author,
