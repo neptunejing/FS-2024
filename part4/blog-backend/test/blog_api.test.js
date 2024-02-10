@@ -73,6 +73,25 @@ test('bad post request without title or url', async () => {
 	await api.post('/api/blogs').send(newBlog).expect(400);
 });
 
+test('delete a blog', async () => {
+	const blogsAtStart = await helper.blogsInDb();
+	const blogTodelete = blogsAtStart[0];
+
+	await api.delete(`/api/blogs/${blogTodelete.id}`).expect(204);
+	const blogsAtEnd = await helper.blogsInDb();
+
+	expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length - 1);
+});
+
+test('update a blog', async () => {
+	const blogsAtStart = await helper.blogsInDb();
+	const blogToUpdate = { ...blogsAtStart[0], title: 'updatedBlog' };
+	const response = await api
+		.put(`/api/blogs/${blogToUpdate.id}`)
+		.send(blogToUpdate);
+	expect(response.body).toEqual(blogToUpdate);
+});
+
 afterAll(async () => {
 	await mongoose.connection.close();
 });
