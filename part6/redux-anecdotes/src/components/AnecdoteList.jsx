@@ -3,7 +3,8 @@ import { voteFor } from '../reducers/anecdoteReducer';
 
 const Anecdotes = () => {
 	const anecdotes = useSelector((state) => {
-		const { filter, anecdotes } = state;
+		const { filter } = state;
+		const anecdotes = [...state.anecdotes];
 		if (filter == null) {
 			return anecdotes.sort((a, b) => b.votes - a.votes);
 		}
