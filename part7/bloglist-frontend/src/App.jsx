@@ -1,86 +1,51 @@
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import blogService from './services/blogs';
-import loginService from './services/login';
 import LoginForm from './components/LoginForm';
 import BlogForm from './components/BlogForm';
 import Togglable from './components/Togglable';
 import Notification from './components/Notification';
 import BlogList from './components/BlogList';
-import { showNotification } from './reducers/nofiticationReducer';
 import { initBlogs } from './reducers/blogReducer';
+import { setUserReducer, login } from './reducers/userReducer';
+import { useSelector } from 'react-redux';
 
 const App = () => {
+	const user = useSelector((state) => state.user);
+
 	const dispatch = useDispatch();
 	useEffect(() => {
 		dispatch(initBlogs());
 	}, [dispatch]);
 
-	// login form
-	const [username, setUsername] = useState('');
-	const [password, setPassword] = useState('');
-	const [user, setUser] = useState(null);
 	// refs
 	const blogFormRef = useRef();
 
-	const handleLogin = async (event) => {
-		event.preventDefault();
-
-		try {
-			const user = await loginService.login({ username, password });
-			window.localStorage.setItem('loggedUser', JSON.stringify(user));
-			blogService.setToken(user.token);
-			setUser(user);
-			setUsername('');
-			setPassword('');
-		} catch (error) {
-			dispatch(
-				showNotification({
-					message: 'Wrong username or password',
-					type: 'error',
-				})
-			);
-			setTimeout(() => {
-				dispatch(showNotification(null));
-			}, 5000);
-		}
-
-		console.log('logging in with', username, password);
-	};
-
-	const handleLogout = () => {
-		window.localStorage.removeItem('loggedUser');
-		setUser(null);
-	};
-
+	// init user
 	useEffect(() => {
 		const loggedUserJSON = window.localStorage.getItem('loggedUser');
 		if (loggedUserJSON) {
 			const user = JSON.parse(loggedUserJSON);
-			setUser(user);
+			dispatch(setUserReducer(user));
 			blogService.setToken(user.token);
 		}
-	}, []);
+	}, [dispatch]);
 
-	if (user === null) {
+	if (user == null) {
 		return (
 			<div>
 				<h2>Log in to application</h2>
 				<Notification />
-				<LoginForm
-					handleLogin={handleLogin}
-					username={username}
-					handleChangeName={(event) =>
-						setUsername(event.target.value)
-					}
-					password={password}
-					handleChangePassword={(event) =>
-						setPassword(event.target.value)
-					}
-				/>
+				<LoginForm />
 			</div>
 		);
 	}
+
+	const handleLogout = () => {
+		window.localStorage.removeItem('loggedUser');
+		dispatch(setUserReducer(null));
+	};
+
 	return (
 		<div>
 			<h2>blogs</h2>
