@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { useDispatch } from 'react-redux';
 import Blog from './components/Blog';
 import blogService from './services/blogs';
 import loginService from './services/login';
@@ -6,11 +7,11 @@ import LoginForm from './components/LoginForm';
 import BlogForm from './components/BlogForm';
 import Togglable from './components/Togglable';
 import Notification from './components/Notification';
-import './index.css';
+import { showNotification } from './reducers/nofiticationReducer';
 
 const App = () => {
-	const [successMessage, setSuccessMessage] = useState(null);
-	const [errorMessage, setErrorMessage] = useState(null);
+	const dispatch = useDispatch();
+
 	const [blogs, setBlogs] = useState([]);
 	// login form
 	const [username, setUsername] = useState('');
@@ -30,9 +31,14 @@ const App = () => {
 			setUsername('');
 			setPassword('');
 		} catch (error) {
-			setErrorMessage('Wrong username or password');
+			dispatch(
+				showNotification({
+					message: 'Wrong username or password',
+					type: 'error',
+				})
+			);
 			setTimeout(() => {
-				setErrorMessage(null);
+				dispatch(showNotification(null));
 			}, 5000);
 		}
 
@@ -51,14 +57,24 @@ const App = () => {
 			const blogs = await blogService.getAll();
 			blogFormRef.current.toggleVisibility();
 			setBlogs(blogs.sort((a, b) => b.likes - a.likes));
-			setSuccessMessage(`a new blog ${title} by ${author} added`);
+			dispatch(
+				showNotification({
+					message: `a new blog ${title} by ${author} added`,
+					type: 'success',
+				})
+			);
 			setTimeout(() => {
-				setSuccessMessage(null);
+				dispatch(showNotification(null));
 			}, 5000);
 		} catch (error) {
-			setErrorMessage(error.response.data.error);
+			dispatch(
+				showNotification({
+					message: error.response.data.error,
+					type: 'error',
+				})
+			);
 			setTimeout(() => {
-				setErrorMessage(null);
+				dispatch(showNotification(null));
 			}, 5000);
 		}
 	};
@@ -69,9 +85,14 @@ const App = () => {
 			const blogs = await blogService.getAll();
 			setBlogs(blogs.sort((a, b) => b.likes - a.likes));
 		} catch (error) {
-			setErrorMessage(error.response.data.error);
+			dispatch(
+				showNotification({
+					message: error.response.data.error,
+					type: 'error',
+				})
+			);
 			setTimeout(() => {
-				setErrorMessage(null);
+				dispatch(showNotification(null));
 			}, 5000);
 		}
 	};
@@ -85,9 +106,14 @@ const App = () => {
 				const blogs = await blogService.getAll();
 				setBlogs(blogs.sort((a, b) => b.likes - a.likes));
 			} catch (error) {
-				setErrorMessage(error.response.data.error);
+				dispatch(
+					showNotification({
+						message: error.response.data.error,
+						type: 'error',
+					})
+				);
 				setTimeout(() => {
-					setErrorMessage(null);
+					dispatch(showNotification(null));
 				}, 5000);
 			}
 		}
@@ -110,10 +136,7 @@ const App = () => {
 		return (
 			<div>
 				<h2>Log in to application</h2>
-				<Notification
-					message={successMessage || errorMessage}
-					type={successMessage !== null ? 'success' : 'error'}
-				/>
+				<Notification />
 				<LoginForm
 					handleLogin={handleLogin}
 					username={username}
@@ -131,10 +154,7 @@ const App = () => {
 	return (
 		<div>
 			<h2>blogs</h2>
-			<Notification
-				message={successMessage || errorMessage}
-				type={successMessage !== null ? 'success' : 'error'}
-			/>
+			<Notification />
 			<p>
 				{user.username} logged in
 				<button onClick={handleLogout}>logout</button>
