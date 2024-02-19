@@ -13,6 +13,7 @@ import { Route, Routes } from 'react-router-dom';
 import UserList from './components/UserList';
 import { getAllUsers } from './reducers/usersReducer';
 import BlogListByUser from './components/BlogListByUser';
+import Blog from './components/Blog';
 
 const App = () => {
 	const loggedUser = useSelector((state) => state.login);
@@ -66,7 +67,8 @@ const App = () => {
 			<Routes>
 				<Route path='/' element={<BlogList />}></Route>
 				<Route path='/users' element={<UserList />}></Route>
-				<Route path='/users/:id' element={<BlogListByUser />} />
+				<Route path='/users/:userId' element={<BlogListByUser />} />
+				<Route path='/blogs/:blogId' element={<Blog />} />
 			</Routes>
 		</div>
 	);

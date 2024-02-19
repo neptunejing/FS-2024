@@ -2,10 +2,10 @@ import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
 const BlogListByUser = () => {
-	const { id } = useParams();
+	const { userId } = useParams();
 	const { blogs, user } = useSelector((state) => ({
-		blogs: state.blogs.filter((blog) => blog.user.id == id),
-		user: state.users.find((user) => user.id == id),
+		blogs: state.blogs.filter((blog) => blog.user.id == userId),
+		user: state.users.find((user) => user.id == userId),
 	}));
 
 	return (
