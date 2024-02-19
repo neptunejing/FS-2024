@@ -7,15 +7,20 @@ import Togglable from './components/Togglable';
 import Notification from './components/Notification';
 import BlogList from './components/BlogList';
 import { initBlogs } from './reducers/blogReducer';
-import { setUserReducer, login } from './reducers/userReducer';
+import { setUserReducer } from './reducers/loginReducer';
 import { useSelector } from 'react-redux';
+import { Route, Routes } from 'react-router-dom';
+import UserList from './components/UserList';
+import { getAllUsers } from './reducers/usersReducer';
+import BlogListByUser from './components/BlogListByUser';
 
 const App = () => {
-	const user = useSelector((state) => state.user);
+	const loggedUser = useSelector((state) => state.login);
 
 	const dispatch = useDispatch();
 	useEffect(() => {
 		dispatch(initBlogs());
+		dispatch(getAllUsers());
 	}, [dispatch]);
 
 	// refs
@@ -31,7 +36,7 @@ const App = () => {
 		}
 	}, [dispatch]);
 
-	if (user == null) {
+	if (loggedUser == null) {
 		return (
 			<div>
 				<h2>Log in to application</h2>
@@ -51,15 +56,18 @@ const App = () => {
 			<h2>blogs</h2>
 			<Notification />
 			<p>
-				{user.username} logged in
+				{loggedUser.username} logged in
 				<button onClick={handleLogout}>logout</button>
 			</p>
-			<br></br>
 			<Togglable buttonLabel='new note' ref={blogFormRef}>
 				<h2>create new</h2>
 				<BlogForm />
 			</Togglable>
-			<BlogList />
+			<Routes>
+				<Route path='/' element={<BlogList />}></Route>
+				<Route path='/users' element={<UserList />}></Route>
+				<Route path='/users/:id' element={<BlogListByUser />} />
+			</Routes>
 		</div>
 	);
 };

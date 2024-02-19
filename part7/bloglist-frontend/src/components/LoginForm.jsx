@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { login } from '../reducers/userReducer';
+import { login } from '../reducers/loginReducer';
+import { useNavigate } from 'react-router-dom';
 
 const LoginForm = () => {
 	const dispatch = useDispatch();
+	const navigate = useNavigate()
 
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
@@ -18,6 +20,7 @@ const LoginForm = () => {
 		dispatch(login(user));
 		setUsername('');
 		setPassword('');
+		navigate('/')
 	};
 
 	return (

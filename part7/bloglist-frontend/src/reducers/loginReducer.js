@@ -1,10 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 import loginService from '../services/login';
 import blogsService from '../services/blogs';
+import usersService from '../services/users';
 import { showNotification } from './nofiticationReducer';
 
-const userSlice = createSlice({
-	name: 'user',
+const loginSlice = createSlice({
+	name: 'login',
 	initialState: null,
 	reducers: {
 		setUserReducer(state, action) {
@@ -13,7 +14,7 @@ const userSlice = createSlice({
 	},
 });
 
-export const { setUserReducer } = userSlice.actions;
+export const { setUserReducer } = loginSlice.actions;
 
 export const login = (userObj) => {
 	return async (dispatch) => {
@@ -36,4 +37,4 @@ export const login = (userObj) => {
 	};
 };
 
-export default userSlice.reducer;
+export default loginSlice.reducer;
